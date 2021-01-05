@@ -13,7 +13,8 @@ public class StringCalculator {
         if(numbers == "") return 0;
 
         // when atleast 1 number is given
-        String[] number_list = numbers.split(",");
+        String delimiters = ",|\n";
+        String[] number_list = numbers.split(delimiters);
         int sum_numbers = 0;
 
         for(int index=0; index<number_list.length; index++) {
