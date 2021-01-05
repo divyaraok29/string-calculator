@@ -1,5 +1,7 @@
 package calculator;
 
+import java.util.ArrayList;
+
 public class StringCalculator {
     public static int add(String numbers) throws NegativesNotAllowedException {
         /** Takes a string of integers, and returns their sum.
@@ -25,13 +27,25 @@ public class StringCalculator {
         
         String[] number_list = numbers.split(delimiters);
         int sum_numbers = 0;
+        boolean found_negative = false;
+        String negatives = "";
 
         for(int index=0; index<number_list.length; index++) {
             int number = Integer.parseInt(number_list[index]);
             if(number < 0){
-                throw new NegativesNotAllowedException("negatives not allowed - " + number);
+                if(! found_negative){
+                    found_negative = true;
+                    negatives = number_list[index];
+                    continue;
+                }
+                negatives += "," + number_list[index];
+                continue;
             }
             sum_numbers += number;
+        }
+
+        if(found_negative) {
+            throw new NegativesNotAllowedException("negatives not allowed - [" + negatives + "]");
         }
 
         return sum_numbers;
