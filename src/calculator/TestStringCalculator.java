@@ -27,9 +27,9 @@ public class TestStringCalculator {
 		String message = "negatives not allowed - ";
 		
 		Throwable exception = assertThrows(NegativesNotAllowedException.class, () -> StringCalculator.add("//#\n-4\n2#-3"));
-		assertEquals(message+"-4", exception.getMessage());
+		assertEquals(message+"[-4,-3]", exception.getMessage());
 		
 		exception = assertThrows(NegativesNotAllowedException.class, () -> StringCalculator.add("//#\n4\n2#-3"));
-		assertEquals(message+"-3", exception.getMessage());
+		assertEquals(message+"[-3]", exception.getMessage());
 	}
 }
