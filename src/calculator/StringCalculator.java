@@ -4,7 +4,7 @@ public class StringCalculator {
     public static int add(String numbers) {
         /** Takes a string of integers, and returns their sum.
          *  Args
-         *      numbers (String) - string of numbers separated by comma
+         *      numbers (String) - string of numbers separated by delimiter
          *  Returns
          *      (int) - sum of the numbers
          */
@@ -14,6 +14,15 @@ public class StringCalculator {
 
         // when atleast 1 number is given
         String delimiters = ",|\n";
+        String default_delimiter = getDefaultDelimiter(numbers);
+        
+        if(default_delimiter != "") {
+            if(delimiters.contains(default_delimiter) == false){
+                delimiters += "|" + default_delimiter;
+            }
+            numbers = numbers.replace("//"+default_delimiter+"\n", "");
+        }
+        
         String[] number_list = numbers.split(delimiters);
         int sum_numbers = 0;
 
@@ -22,5 +31,26 @@ public class StringCalculator {
         }
 
         return sum_numbers;
+    }
+
+    private static String getDefaultDelimiter(String numbers) {
+        /** Takes a string of numbers and returns the default delimiter.
+         *  Default delimiter would be of pattern - "//[delimiter]\n[numbers…]""
+         *  Ex: "//;\n1;2" - default delimiter is ';'
+         *
+         *  Args
+         *      numbers (String) - string of numbers separated by delimiter
+         *  Returns
+         *      (String) - default delimiter used to split the numbers
+         */
+        if(numbers.startsWith("//")) {
+            int start_index = 2, end_index = numbers.indexOf("\n");
+            // when the default delimiter is '\n', find its second occurrence
+            if(start_index == end_index) {
+                end_index = numbers.indexOf("\n", end_index+1);
+            }
+            return numbers.substring(start_index, end_index);
+        }
+        return "";
     }
 }
