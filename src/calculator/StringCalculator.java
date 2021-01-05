@@ -9,18 +9,17 @@ public class StringCalculator {
          *      (int) - sum of the numbers
          */
 
+        // when there are no numbers
+        if(numbers == "") return 0;
+
+        // when atleast 1 number is given
         String[] number_list = numbers.split(",");
-        
-        // when the no. of numbers is 0
-        if(number_list[0].length() == 0) return 0;
+        int sum_numbers = 0;
 
-        int number1, number2;
-        number1 = Integer.parseInt(number_list[0]);
-        // when the no. of numbers is 1
-        if(number_list.length == 1) return number1;
+        for(int index=0; index<number_list.length; index++) {
+            sum_numbers += Integer.parseInt(number_list[index]);
+        }
 
-        // when the no. of numbers is greater than 1, i.e. assuming max length is 2
-        number2 = Integer.parseInt(number_list[1]);
-        return number1 + number2;
+        return sum_numbers;
     }
 }
