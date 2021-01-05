@@ -1,7 +1,7 @@
 package calculator;
 
 public class StringCalculator {
-    public static int add(String numbers) {
+    public static int add(String numbers) throws NegativesNotAllowedException {
         /** Takes a string of integers, and returns their sum.
          *  Args
          *      numbers (String) - string of numbers separated by delimiter
@@ -17,7 +17,7 @@ public class StringCalculator {
         String default_delimiter = getDefaultDelimiter(numbers);
         
         if(default_delimiter != "") {
-            if(delimiters.contains(default_delimiter) == false){
+            if(!delimiters.contains(default_delimiter)){
                 delimiters += "|" + default_delimiter;
             }
             numbers = numbers.replace("//"+default_delimiter+"\n", "");
@@ -27,7 +27,11 @@ public class StringCalculator {
         int sum_numbers = 0;
 
         for(int index=0; index<number_list.length; index++) {
-            sum_numbers += Integer.parseInt(number_list[index]);
+            int number = Integer.parseInt(number_list[index]);
+            if(number < 0){
+                throw new NegativesNotAllowedException("negatives not allowed - " + number);
+            }
+            sum_numbers += number;
         }
 
         return sum_numbers;
@@ -52,5 +56,11 @@ public class StringCalculator {
             return numbers.substring(start_index, end_index);
         }
         return "";
+    }
+}
+
+class NegativesNotAllowedException extends Exception {
+    NegativesNotAllowedException(String message) {
+        super(message);
     }
 }
