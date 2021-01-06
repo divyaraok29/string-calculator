@@ -56,6 +56,10 @@ public class TestStringCalculator {
 		assertEquals(60,StringCalculator.add("//[[][]]\n21[33]1,2\n3"));
 		// Assuming the below case is invalid
 		// assertEquals(60,StringCalculator.add("//[][][[]]\n21][33[]1,2\n3"));
+
+		// Multiple delimiters with length longer than 1 char
+		assertEquals(6,StringCalculator.add("//[**][%%]\n1**2%%3"));
+		assertEquals(6,StringCalculator.add("//[*][%]\n1*2%3"));
 	}
 
 	@Test
