@@ -50,6 +50,12 @@ public class TestStringCalculator {
 		assertEquals(60,StringCalculator.add("//[//]\n21//33//1,2//3"));
 		assertEquals(60,StringCalculator.add("//[]\n]\n21]\n33]\n1,2]\n3"));
 		assertEquals(60,StringCalculator.add("//[-]\n21-33-1,2\n3"));
+
+		// Multiple delimiters
+		assertEquals(60,StringCalculator.add("//[-][+]\n21-33+1,2\n3"));
+		assertEquals(60,StringCalculator.add("//[[][]]\n21[33]1,2\n3"));
+		// Assuming the below case is invalid
+		// assertEquals(60,StringCalculator.add("//[][][[]]\n21][33[]1,2\n3"));
 	}
 
 	@Test
