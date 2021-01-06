@@ -34,13 +34,17 @@ public class StringCalculator {
 
         if(result.size() != 0){
             default_delimiter = result.get(0);
-            clean_numbers = result.get(1);
+            clean_numbers = result.get(result.size()-1);
         }
 
         if(default_delimiter != "") {
-            if(!delimiters.contains(default_delimiter)){
-                delimiters += "|\\Q" + default_delimiter + "\\E";
+            for (int index=0; index<result.size()-1; index++) {
+                default_delimiter = result.get(index);
+                if(!delimiters.contains(default_delimiter)){
+                    delimiters += "|\\Q" + default_delimiter + "\\E";
+                }
             }
+            
             numbers = clean_numbers;
         }
 
@@ -99,8 +103,9 @@ public class StringCalculator {
          */
 
         ArrayList<String> result = new ArrayList<>();
+        String[] delimiter_list;
 
-        String match_multilen_delimiter = "(^//\\[(.|\n)+?\\]\n(\\d|-)|";
+        String match_multilen_delimiter = "(^//(\\[(.|\n)+?\\])+\n(\\d|-)|";
         String match_single_delimiter = "^//(.|\n)\n(\\d|-))";
         String match_combined_delimiter = match_multilen_delimiter + match_single_delimiter;
         
@@ -119,12 +124,16 @@ public class StringCalculator {
             if(delimiter.endsWith("]\n")){
                 // follows multi length delimiter pattern
                 delimiter = delimiter.substring(3, delimiter.length()-2);
+                delimiter_list = delimiter.split("\\]\\[");
+                for (String item : delimiter_list) {
+                    result.add(item);
+                }
             }else {
                 // follows single length delimiter pattern
                 delimiter = delimiter.substring(2, delimiter.length()-1);
+                result.add(delimiter);
             }
             
-            result.add(delimiter);
             result.add(actual_numbers);
         }
         return result;
