@@ -39,6 +39,8 @@ public class StringCalculator {
 
         for(int index=0; index<number_list.length; index++) {
             int number = Integer.parseInt(number_list[index]);
+
+            // if any number is negative, throwing NegativesNotAllowedException
             if(number < 0){
                 if(! found_negative){
                     found_negative = true;
@@ -48,6 +50,10 @@ public class StringCalculator {
                 negatives += "," + number_list[index];
                 continue;
             }
+
+            // if any number is greater than 1000, ignoring it
+            if(number > 1000) continue;
+
             sum_numbers += number;
         }
 
