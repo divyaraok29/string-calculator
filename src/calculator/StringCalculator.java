@@ -1,8 +1,13 @@
 package calculator;
 
-import java.util.ArrayList;
 
 public class StringCalculator {
+    private static int count_invokes_to_add;
+
+    StringCalculator() {
+        count_invokes_to_add = 0;
+    }
+
     public static int add(String numbers) throws NegativesNotAllowedException {
         /** Takes a string of integers, and returns their sum.
          *  Args
@@ -10,6 +15,8 @@ public class StringCalculator {
          *  Returns
          *      (int) - sum of the numbers
          */
+
+        count_invokes_to_add++;
 
         // when there are no numbers
         if(numbers == "") return 0;
@@ -70,6 +77,11 @@ public class StringCalculator {
             return numbers.substring(start_index, end_index);
         }
         return "";
+    }
+
+    public static int getCalledCount() {
+        /** This method returns the no. of calls to above Add method. */
+        return count_invokes_to_add;
     }
 }
 
