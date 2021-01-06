@@ -1,5 +1,8 @@
 package calculator;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringCalculator {
     private static int count_invokes_to_add;
@@ -23,16 +26,34 @@ public class StringCalculator {
 
         // when atleast 1 number is given
         String delimiters = ",|\n";
-        String default_delimiter = getDefaultDelimiter(numbers);
-        
+
+        ArrayList<String> result = new ArrayList<>();
+        result = getDefaultDelimiter(numbers);
+
+        String default_delimiter = "", clean_numbers = numbers;
+
+        if(result.size() != 0){
+            default_delimiter = result.get(0);
+            clean_numbers = result.get(1);
+        }
+
         if(default_delimiter != "") {
             if(!delimiters.contains(default_delimiter)){
-                delimiters += "|" + default_delimiter;
+                delimiters += "|\\Q" + default_delimiter + "\\E";
             }
-            numbers = numbers.replace("//"+default_delimiter+"\n", "");
+            numbers = clean_numbers;
         }
-        
-        String[] number_list = numbers.split(delimiters);
+
+        String[] number_list;
+        // when first number after the delimiter regex is a negative integer
+        if(numbers.startsWith("-")){
+            numbers = numbers.substring(1);
+            number_list = numbers.split(delimiters);
+            number_list[0] = "-" + number_list[0];
+        }
+        else{
+            number_list = numbers.split(delimiters);
+        }
         int sum_numbers = 0;
         boolean found_negative = false;
         String negatives = "";
@@ -64,25 +85,49 @@ public class StringCalculator {
         return sum_numbers;
     }
 
-    private static String getDefaultDelimiter(String numbers) {
-        /** Takes a string of numbers and returns the default delimiter.
-         *  Default delimiter would be of pattern - "//[delimiter]\n[numbers…]""
+    private static ArrayList<String> getDefaultDelimiter(String numbers) {
+        /** Takes a string of numbers and returns the default delimiter and
+         *  cleaned string of numbers.
+         *  Default delimiter would be of pattern - "//[delimiter]\n[numbers…]"
          *  Ex: "//;\n1;2" - default delimiter is ';'
-         *
+         *      "//[***]\n1***2" - default delimiter is '***'
          *  Args
          *      numbers (String) - string of numbers separated by delimiter
          *  Returns
-         *      (String) - default delimiter used to split the numbers
+         *      ArrayList(String) - default delimiter used to split the numbers
+         *                          and cleaned numbers without the delimiter identifier
          */
-        if(numbers.startsWith("//")) {
-            int start_index = 2, end_index = numbers.indexOf("\n");
-            // when the default delimiter is '\n', find its second occurrence
-            if(start_index == end_index) {
-                end_index = numbers.indexOf("\n", end_index+1);
+
+        ArrayList<String> result = new ArrayList<>();
+
+        String match_multiple_delimiter = "(^//\\[(.|\n)+?\\]\n(\\d|-)|";
+        String match_single_delimiter = "^//(.|\n)+?\n(\\d|-))";
+        String match_combined_delimiter = match_multiple_delimiter + match_single_delimiter;
+        
+        Pattern pattern = Pattern.compile(match_combined_delimiter, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(numbers);
+
+        if(matcher.find()) {
+            String delimiter = matcher.group(0);
+            // the above group would end with a digit, so removing
+            // it to get our required pattern
+            delimiter = delimiter.substring(0,delimiter.length()-1);
+            // before moving forward, we calculate our actual set
+            // of numbers
+            String actual_numbers = numbers.substring(delimiter.length());
+
+            if(delimiter.endsWith("]\n")){
+                // follows multi delimiter pattern
+                delimiter = delimiter.substring(3, delimiter.length()-2);
+            }else {
+                // follows single delimiter pattern
+                delimiter = delimiter.substring(2, delimiter.length()-1);
             }
-            return numbers.substring(start_index, end_index);
+            
+            result.add(delimiter);
+            result.add(actual_numbers);
         }
-        return "";
+        return result;
     }
 
     public static int getCalledCount() {
