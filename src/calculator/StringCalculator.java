@@ -100,9 +100,9 @@ public class StringCalculator {
 
         ArrayList<String> result = new ArrayList<>();
 
-        String match_multiple_delimiter = "(^//\\[(.|\n)+?\\]\n(\\d|-)|";
-        String match_single_delimiter = "^//(.|\n)+?\n(\\d|-))";
-        String match_combined_delimiter = match_multiple_delimiter + match_single_delimiter;
+        String match_multilen_delimiter = "(^//\\[(.|\n)+?\\]\n(\\d|-)|";
+        String match_single_delimiter = "^//(.|\n)\n(\\d|-))";
+        String match_combined_delimiter = match_multilen_delimiter + match_single_delimiter;
         
         Pattern pattern = Pattern.compile(match_combined_delimiter, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(numbers);
@@ -117,10 +117,10 @@ public class StringCalculator {
             String actual_numbers = numbers.substring(delimiter.length());
 
             if(delimiter.endsWith("]\n")){
-                // follows multi delimiter pattern
+                // follows multi length delimiter pattern
                 delimiter = delimiter.substring(3, delimiter.length()-2);
             }else {
-                // follows single delimiter pattern
+                // follows single length delimiter pattern
                 delimiter = delimiter.substring(2, delimiter.length()-1);
             }
             
