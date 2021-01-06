@@ -42,6 +42,14 @@ public class TestStringCalculator {
 		assertEquals(27,StringCalculator.add("//#\n21,1001\n1,2\n3"));
 		assertEquals(1027,StringCalculator.add("//#\n21,1000\n1,2\n3"));
 		
+		// Multilength delimiters
+		assertEquals(360,StringCalculator.add("//[****]\n21,333****1,2****3"));
+		assertEquals(60,StringCalculator.add("//[++]\n21,33++1,2++3"));
+		assertEquals(60,StringCalculator.add("//[]]\n21,33]1,2]3"));
+		assertEquals(60,StringCalculator.add("//[[]\n21[33[1,2[3"));
+		assertEquals(60,StringCalculator.add("//[//]\n21//33//1,2//3"));
+		assertEquals(60,StringCalculator.add("//[]\n]\n21]\n33]\n1,2]\n3"));
+		assertEquals(60,StringCalculator.add("//[-]\n21-33-1,2\n3"));
 	}
 
 	@Test
@@ -55,6 +63,9 @@ public class TestStringCalculator {
 		
 		exception = assertThrows(NegativesNotAllowedException.class, () -> StringCalculator.add("//#\n4\n2#-3"));
 		assertEquals(message+"[-3]", exception.getMessage());
+
+		exception = assertThrows(NegativesNotAllowedException.class, () -> StringCalculator.add("//[-]\n-21-33-1,2\n3"));
+		assertEquals(message+"[-21]", exception.getMessage());
 
 		System.out.println("The no. of invokes when the thrown exceptions are handled: " + StringCalculator.getCalledCount());
 	}
