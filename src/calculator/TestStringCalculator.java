@@ -37,6 +37,10 @@ public class TestStringCalculator {
 		// finally{
 		// 	System.out.println("The no. of invokes after exception is thrown: " + StringCalculator.getCalledCount());
 		// }
+
+		// Ignoring numbers greater than 1000
+		assertEquals(27,StringCalculator.add("//#\n21,1001\n1,2\n3"));
+		assertEquals(1027,StringCalculator.add("//#\n21,1000\n1,2\n3"));
 		
 	}
 
